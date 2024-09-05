@@ -10,7 +10,7 @@ public class PartidaService {
     public ResponseEntity<RetornarPartidaDTO> getPartida(Integer idPartida) {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForEntity(
-                "http://localhost:8080/partida/" + idPartida,
+                "http://campeonato:8080/partida/" + idPartida,
                 RetornarPartidaDTO.class);
     }
 
