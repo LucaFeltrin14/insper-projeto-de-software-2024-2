@@ -9,6 +9,7 @@ import br.insper.loja.partida.dto.SalvarPartidaDTO;
 import br.insper.loja.time.model.Time;
 import br.insper.loja.time.service.TimeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class PartidaService {
 
     @Autowired
     private TimeService timeService;
+
+    @Autowired
+    private KafkaTemplate<String, RetornarPartidaDTO> kafkaTemplate;
 
     public RetornarPartidaDTO cadastrarPartida(SalvarPartidaDTO salvarPartidaDTO) {
 
@@ -68,7 +72,12 @@ public class PartidaService {
         partida.setStatus("REALIZADA");
 
         partida = partidaRepository.save(partida);
-        return RetornarPartidaDTO.getRetornarPartidaDTO(partida);
+
+        RetornarPartidaDTO retornarPartidaDTO =
+                RetornarPartidaDTO.getRetornarPartidaDTO(partida);
+        kafkaTemplate.send("partidas", retornarPartidaDTO);
+
+        return  retornarPartidaDTO;
 
     }
 
