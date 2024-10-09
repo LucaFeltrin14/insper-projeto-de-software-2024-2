@@ -13,7 +13,7 @@ public class TabelaController {
     private TabelaService tabelaService;
 
     @GetMapping("/tabela")
-    public List<TabelaDTO> getTabela() {
+    public List<Tabela> getTabela() {
         return tabelaService.getTabela();
     }
 }
